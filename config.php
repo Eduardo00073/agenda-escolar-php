@@ -22,7 +22,7 @@ date_default_timezone_set('America/Sao_Paulo');
 
 // Configurações do Banco de Dados
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'u178632972_agenda_escolar');
+define('DB_NAME', 'seu_banco_de_dados_aqui');
 define('DB_USER', 'seu_usuario_db');
 define('DB_PASS', 'sua_senha_db');
 
@@ -60,7 +60,7 @@ if (DEV_MODE) {
 define('GEMINI_API_KEY', 'SUA_API_KEY_DO_GEMINI_AQUI');
 
 // ── Configurações de SMTP do E-mail de Envio (Notificações) ──
-define('SMTP_HOST', 'smtp.hostinger.com');
+define('SMTP_HOST', 'smtp.seudominio.com.br');
 define('SMTP_PORT', 465);
 define('SMTP_USER', 'agenda_escolar@escolaexemplo.com.br');
 define('SMTP_PASS', 'SUA_SENHA_SMTP_AQUI');
