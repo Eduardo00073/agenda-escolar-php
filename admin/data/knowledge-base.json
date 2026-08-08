@@ -1,0 +1,311 @@
+{
+  "meta": {
+    "sistema": "Agenda Escolar",
+    "versao": "3.0",
+    "escola": "Colégio Exemplo Modelo",
+    "desenvolvedor": "Eduardo Junior Alcântara da Silva",
+    "cargo_desenvolvedor": "Professor de TI e Desenvolvedor Full Stack",
+    "site_desenvolvedor": "https://www.prof-eduardo.com/",
+    "descricao": "Sistema web de agendamento de visitas guiadas para o Colégio Exemplo Modelo de Jales. Permite que famílias interessadas agendem visitas presenciais à escola, e os administradores gerenciem esses agendamentos com notificações por e-mail e WhatsApp."
+  },
+
+  "area_publica": {
+    "descricao": "Área acessível por qualquer pessoa sem login. É o site público onde as famílias fazem o agendamento.",
+    "como_agendar_passo_a_passo": [
+      "1. O visitante acessa a página inicial do site (index.php).",
+      "2. Um calendário interativo mostra os meses com as datas disponíveis coloridas: verde = disponível, amarelo = quase cheio, vermelho = lotado, cinza = sem horário.",
+      "3. O visitante clica em uma data disponível no calendário para ver os horários daquele dia.",
+      "4. O visitante seleciona o horário desejado clicando sobre ele.",
+      "5. Após selecionar o horário, um formulário aparece pedindo os dados: nome do responsável (obrigatório), telefone (obrigatório), WhatsApp (opcional), e-mail (opcional), nome da criança (opcional), idade (opcional), segmento escolar de interesse (obrigatório), série de interesse (opcional), e observações opcionais.",
+      "6. O visitante preenche o formulário e clica em 'Confirmar Agendamento'. Apenas o nome do responsável, telefone e segmento são obrigatórios.",
+      "7. O sistema verifica se ainda há vagas disponíveis para evitar overbooking.",
+      "8. Se houver vaga, o agendamento é criado com status 'Pendente' e é gerado um código de acompanhamento no formato XV-{número} (ex: XV-15, XV-16).",
+      "9. O sistema envia automaticamente um e-mail de notificação para todos os administradores que configuraram e-mail de notificação no perfil.",
+      "10. Se o visitante informou e-mail, ele também recebe um e-mail de confirmação com o resumo completo do agendamento, o código XV e orientações para o dia da visita.",
+      "11. O visitante é redirecionado para a página de confirmação (confirmacao.php), que mostra todos os dados do agendamento, o código QR Code, botão de WhatsApp e botão para adicionar à agenda do Google."
+    ],
+    "pagina_confirmacao": {
+      "descricao": "Exibida ao visitante após completar o agendamento com sucesso.",
+      "conteudo": [
+        "Código de acompanhamento no formato XV-{número} em destaque",
+        "QR Code gerado automaticamente com os dados do agendamento",
+        "Resumo completo: data, horário, nome do responsável, nome da criança, segmento, série",
+        "Botão verde 'WhatsApp' que abre o WhatsApp com mensagem pré-preenchida contendo o resumo completo do agendamento (nome, aluno, segmento, série, data, horário e código) direcionado ao telefone da escola cadastrado em Configurações",
+        "Botão 'Adicionar ao Google Agenda' que cria automaticamente o evento no calendário Google do visitante. Em dispositivos móveis, abre o aplicativo do Google Agenda ao invés do site.",
+        "Botão 'Imprimir Comprovante' para salvar/imprimir a página",
+        "Orientações para o dia da visita (chegar 10 min antes, ponto de encontro na recepção, etc.)",
+        "Informações de contato da escola"
+      ],
+      "token_qrcode": "O QR Code pode ser escaneado pela equipe administrativa da escola para acessar rapidamente os dados do agendamento e marcar como realizado.",
+      "botao_whatsapp": "O botão verde do WhatsApp gera automaticamente uma mensagem com todos os dados da visita e envia para o número da escola cadastrado em Configurações. Só aparece se houver telefone cadastrado."
+    },
+    "codigo_agendamento": {
+      "formato": "XV-{id_do_banco}",
+      "exemplos": ["XV-1", "XV-15", "XV-42"],
+      "descricao": "Código curto e amigável gerado automaticamente. Substituiu o antigo token longo e ilegível. Cada agendamento tem um código único."
+    },
+    "notificacao_email_visitante": {
+      "descricao": "Se o visitante informou um e-mail válido no formulário, ele recebe automaticamente um e-mail bonito em HTML com o resumo completo do agendamento.",
+      "conteudo_email": [
+        "Cabeçalho com nome do colégio",
+        "Badge verde 'Agendamento Pré-Registrado com Sucesso!'",
+        "Saudação personalizada com o nome do responsável",
+        "Quadro com resumo: Data, Horário, Segmento, Série, Nome do Aluno",
+        "Código de Acompanhamento em destaque grande",
+        "Orientações para o dia da visita",
+        "Botão 'Ver Comprovante Online' com link direto para a tela de confirmação"
+      ],
+      "condicao": "O e-mail só é enviado se o visitante preencheu um e-mail válido no formulário. Se deixou em branco, nada acontece."
+    }
+  },
+
+  "painel_administrativo": {
+    "acesso": "O painel é acessado em /admin/login.php. Apenas administradores cadastrados com e-mail/login e senha podem entrar.",
+    "logout": "O botão 'Sair do Painel' fica na parte inferior do menu lateral (sidebar).",
+    "sessao": "A sessão administrativa é protegida. Se tentar acessar qualquer página sem estar logado, o sistema redireciona para o login.",
+
+    "dashboard": {
+      "rota": "/admin/index.php",
+      "descricao": "Página inicial do painel com visão geral do sistema.",
+      "conteudo": [
+        "Cartão de boas-vindas explicando como funciona o sistema em 3 passos",
+        "4 cards de métricas: total de Pendentes, Confirmados, Realizados e Cancelados",
+        "O card de Pendentes é clicável: ao clicar, abre um modal flutuante com a lista de todos os agendamentos pendentes, permitindo confirmar diretamente de lá sem sair do dashboard",
+        "Os demais cards (Confirmados, Realizados, Cancelados) ao clicar, abrem a tela de Agendamentos com o filtro correspondente já aplicado",
+        "Lista das próximas 5 visitas agendadas em ordem cronológica (status pendente ou confirmado)",
+        "Lista dos 5 agendamentos mais recentemente criados no sistema"
+      ],
+      "fluxo_basico": "1. Cadastre horários disponíveis → 2. Visitantes fazem agendamento → 3. Aparece como Pendente → 4. Confirme e marque como Realizado."
+    },
+
+    "agendamentos": {
+      "rota": "/admin/agendamentos.php",
+      "descricao": "Lista todos os agendamentos do sistema com filtros e ações rápidas.",
+      "filtros": [
+        "Busca por nome do responsável ou da criança (campo de pesquisa à esquerda da barra)",
+        "Filtro por status: Todos, Pendentes, Confirmados, Realizados, Cancelados (botões de filtro)",
+        "Filtro por data da visita"
+      ],
+      "colunas_tabela": ["Data e Hora", "Responsável + Código", "Criança / Série", "Contato", "Status + Admin responsável", "Ações"],
+      "acoes_rapidas": [
+        "Botão de confirmação (laranja) — aparece apenas quando status é Pendente",
+        "Botão de realizado (verde) — aparece apenas quando status é Confirmado",
+        "Botão de cancelar (vermelho) — aparece quando não está cancelado nem realizado",
+        "Botão de Detalhes — leva para a ficha completa do agendamento"
+      ],
+      "paginacao": "Exibe 10 agendamentos por página com navegação entre páginas."
+    },
+
+    "agendamento_detalhes": {
+      "rota": "/admin/agendamento-detalhes.php?id={ID}",
+      "descricao": "Ficha completa de um agendamento específico.",
+      "conteudo": [
+        "Dados completos do aluno: nome, idade, segmento, série",
+        "Dados completos do responsável: nome, telefone, WhatsApp (com botão Conversar no WhatsApp), e-mail (com botão Enviar E-mail)",
+        "Observações enviadas pelo visitante",
+        "Status atual da visita com badge colorido",
+        "Código de acompanhamento (XV-número)",
+        "Histórico completo de status: quando foi confirmado e por qual admin, quando foi realizado e por qual admin",
+        "Controle de status: botões para Confirmar, Marcar como Realizada, Cancelar, ou Reverter para Pendente",
+        "Data e horário da agenda selecionada"
+      ],
+      "rastreabilidade": "O sistema registra qual administrador realizou cada mudança de status, com data e hora exatas. Isso aparece no histórico da ficha."
+    },
+
+    "status_agendamento": {
+      "pendente": "Status inicial. O visitante fez o agendamento mas a escola ainda não confirmou. Badge amarelo.",
+      "confirmado": "A escola confirmou a visita. Badge laranja.",
+      "realizado": "A visita foi realizada presencialmente. Badge verde.",
+      "cancelado": "A visita foi cancelada. Badge vermelho. O slot de horário é liberado para outros agendamentos.",
+      "reverter": "É possível reverter um cancelado ou realizado de volta para Pendente, caso necessário."
+    },
+
+    "horarios_disponiveis": {
+      "rota": "/admin/horarios.php",
+      "descricao": "Gerenciamento dos períodos de visita disponíveis para agendamento.",
+      "como_funciona": "O administrador cria os horários aqui. Eles aparecem automaticamente no calendário público do site para que os visitantes possam se agendar. Há um fluxo visual de 3 passos no topo da tela explicando: 1) Crie o horário → 2) Família agenda → 3) Confirme a visita.",
+      "cadastro_individual": {
+        "descricao": "Clique em 'Criar Novo Horário', aba 'Data Específica'.",
+        "campos": ["Data da visita", "Horário de início", "Horário de término", "Quantas famílias podem agendar neste horário (vagas simultâneas)"]
+      },
+      "cadastro_em_lote": {
+        "descricao": "Aba 'Vários Dias de Uma Vez' — ideal para abrir várias semanas de uma só vez.",
+        "passo_1": "De quando até quando? — Selecione data de início e data de término do período",
+        "passo_2": "Em quais dias da semana? — Clique nos dias (Segunda, Terça, etc.) que terão horários",
+        "passo_3": "Qual o horário e quantas vagas? — Defina o horário e quantidade de vagas",
+        "pre_visualizacao": "Antes de salvar, o sistema mostra uma prévia: 'Serão criados X horários entre DD/MM e DD/MM, toda segunda e sexta, das 08:00 às 11:00, com 3 vagas cada.'",
+        "exemplo_pratico": "Para criar horários todas as semanas em julho: inicio=01/07, fim=31/07, dias=Segunda+Quarta+Sexta, horário=08:00-11:00, vagas=3"
+      },
+      "editar_horario": {
+        "descricao": "Cada horário tem um botão 'Editar' que abre um modal com os dados pré-preenchidos: data, hora de início, hora de término e número de vagas.",
+        "protecao": "Se o horário já possui agendamentos vinculados, o sistema não permite reduzir o número de vagas abaixo do total de agendamentos existentes. Um aviso amarelo aparece no modal informando quantos agendamentos existem.",
+        "campos_editaveis": ["Data da visita", "Horário de início", "Horário de término", "Número de vagas"]
+      },
+      "filtros": [
+        "Período: Próximos (padrão) | Todos | Passados",
+        "Status: Ativos (padrão) | Inativos | Todos"
+      ],
+      "listagem": "Os horários são exibidos agrupados por data, com o nome do dia da semana. Cada slot mostra o horário em destaque, um badge de status (ATIVO verde, INATIVO cinza, LOTADO vermelho) e uma barra colorida de ocupação (verde=livre, amarelo=quase cheio, vermelho=lotado).",
+      "acoes_por_slot": [
+        "Botão 'Editar' — abre modal para alterar data, horário e vagas",
+        "Botão 'Desativar' / 'Ativar' — alterna se o horário aparece no site público ou não",
+        "Botão 'Excluir' — remove o horário permanentemente (desabilitado se tiver agendamentos)"
+      ],
+      "excluir_horario": "Só é possível excluir horários sem agendamentos vinculados. Se tiver agendamentos, desative-o em vez de excluir.",
+      "selecao_em_massa": "Marque vários horários com os checkboxes e use a barra de ações para ativar, desativar ou excluir vários de uma vez.",
+      "estado_vazio": "Quando não há horários cadastrados, a tela mostra um guia visual passo a passo com 3 etapas numeradas explicando como criar o primeiro horário."
+    },
+
+    "calendario_visitas": {
+      "rota": "/admin/calendario.php",
+      "descricao": "Visualização de todos os agendamentos em formato de calendário. Powered by FullCalendar.",
+      "views": ["Mês (padrão)", "Semana", "Dia"],
+      "navegacao": "Use os botões Anterior/Próximo para navegar entre meses. O botão 'Hoje' volta para a data atual.",
+      "scroll_automatico": "Ao abrir o calendário, ele automaticamente rola para o dia de hoje e destaca com um brilho laranja.",
+      "eventos": "Cada agendamento aparece como um evento colorido: amarelo=pendente, laranja=confirmado, verde=realizado, vermelho=cancelado.",
+      "clique_evento": "Clicar em um evento abre um modal com os dados resumidos e um botão 'Ver Ficha Completa' que leva para os detalhes."
+    },
+
+    "segmentos_ensino": {
+      "rota": "/admin/segmentos.php",
+      "descricao": "Gerencia os segmentos escolares que aparecem no formulário de agendamento para o visitante escolher.",
+      "o_que_sao": "São as divisões de ensino da escola, como 'Berçário', 'Educação Infantil', 'Anos Iniciais', 'Anos Finais', 'Ensino Médio'.",
+      "cadastrar": "Clique em 'Adicionar Segmento', informe o nome e a ordem de exibição (número menor aparece primeiro na lista).",
+      "editar": "Clique no ícone de lápis ao lado do segmento para abrir o modal de edição.",
+      "toggle_ativo": "O botão verde 'Ativo' / cinza 'Inativo' controla se o segmento aparece para os visitantes no formulário.",
+      "excluir": "Só é possível excluir segmentos sem agendamentos vinculados. Caso tenha agendamentos, desative-o.",
+      "ordem": "O campo 'Ordem de Exibição' define em que posição o segmento aparece na lista do formulário público. Menor número = aparece primeiro."
+    },
+
+    "administradores": {
+      "rota": "/admin/administradores.php",
+      "descricao": "Gerencia os usuários que têm acesso ao painel administrativo.",
+      "cadastrar": "Clique em 'Adicionar Administrador', informe nome completo, login/e-mail e senha (mínimo 6 caracteres). A senha é criptografada com bcrypt.",
+      "excluir": "Clique no botão 'Remover'. Não é possível excluir seu próprio login, nem excluir o último administrador do sistema.",
+      "seguranca": "Cada administrador tem seu próprio login e senha. O sistema registra qual admin realizou cada mudança de status nos agendamentos.",
+      "contas_padrao_pre_cadastradas": [
+        {
+          "nome": "Jessica Bonfim de Araujo",
+          "usuario": "jessica",
+          "senha_padrao": "jessica@2026"
+        },
+        {
+          "nome": "Suellen Karla Pedro Silva",
+          "usuario": "suellen",
+          "senha_padrao": "suellen@2026"
+        }
+      ]
+    },
+
+    "configuracoes": {
+      "rota": "/admin/configuracoes.php",
+      "descricao": "Configurações institucionais, notificações pessoais e alteração de senha.",
+      "lado_esquerdo": {
+        "titulo": "Dados da Instituição",
+        "campos": ["Nome da escola", "Telefone geral", "E-mail de contato", "Endereço completo", "Mensagem pós-agendamento (texto personalizado exibido ao visitante após concluir o agendamento)"]
+      },
+      "lado_direito": {
+        "card_notificacoes": {
+          "titulo": "Notificações por E-mail",
+          "descricao": "Cada administrador pode configurar seu próprio e-mail para receber notificações automáticas sempre que um novo agendamento for realizado.",
+          "como_funciona": "O campo 'Meu E-mail para Receber Novos Agendamentos' permite que cada admin informe o e-mail onde deseja receber alertas. Se deixar em branco, não recebe. Cada admin controla o seu independentemente.",
+          "exemplo": "Se há 3 administradores e todos preencheram o campo, os 3 recebem e-mail quando houver um novo agendamento. Se apenas 1 preencheu, só ele recebe."
+        },
+        "card_senha": {
+          "titulo": "Alterar Senha do Usuário",
+          "descricao": "Para alterar sua senha, informe a senha atual, a nova senha (mínimo 6 caracteres) e a confirmação."
+        }
+      },
+      "atencao": "Não há recuperação de senha por e-mail. Se esquecer, outro administrador pode excluir e recriar o acesso."
+    },
+
+    "notificacoes_email": {
+      "descricao": "O sistema envia e-mails automáticos via SMTP autenticado (PHPMailer) em dois cenários:",
+      "para_administradores": {
+        "quando": "Sempre que um novo agendamento é realizado por um visitante",
+        "para_quem": "Todos os administradores que preencheram o campo 'Meu E-mail para Receber Novos Agendamentos' em Configurações",
+        "conteudo": "Nome do responsável, telefone, WhatsApp, e-mail, nome do aluno, série/segmento, data e horário da visita, código token, botão para acessar a ficha do agendamento"
+      },
+      "para_visitante": {
+        "quando": "Sempre que o visitante informou um e-mail válido no formulário de agendamento",
+        "conteudo": "Saudação personalizada, resumo da visita (data, horário, segmento, série, nome do aluno), código de acompanhamento em destaque, orientações para o dia da visita, botão para ver comprovante online"
+      },
+      "configuracao_smtp": "O envio utiliza a biblioteca PHPMailer com SMTP autenticado. As credenciais SMTP são configuradas no arquivo config.php (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE)."
+    },
+
+    "ajuda_ia": {
+      "rota": "/admin/ajuda.php",
+      "descricao": "Tela do Assistente do Prof. Edu., o assistente virtual. Responde dúvidas sobre o uso do sistema Agenda Escolar.",
+      "como_usar": "Digite sua dúvida no campo de texto e pressione Enter ou clique em Enviar. Você também pode clicar nas perguntas sugeridas para respostas instantâneas.",
+      "limitacoes": "O assistente só pode ajudar com dúvidas sobre o Agenda Escolar. Para outras questões, entre em contato com o desenvolvedor pelo site prof-eduardo.com."
+    }
+  },
+
+  "perguntas_frequentes": [
+    {
+      "pergunta": "Como cadastrar um novo horário de visita?",
+      "resposta": "Acesse **Horários de Visitas** no menu lateral. Clique em **Criar Novo Horário** e escolha a aba:\n\n• **Data Específica** — para um dia avulso. Preencha data, hora de início, hora de término e quantidade de vagas.\n\n• **Vários Dias de Uma Vez** — para abrir várias semanas. Siga os 3 passos: escolha o período (de/até), selecione os dias da semana, defina o horário e as vagas. Uma prévia mostrará quantos horários serão criados antes de confirmar."
+    },
+    {
+      "pergunta": "Como editar um horário já criado?",
+      "resposta": "Na tela **Horários de Visitas**, cada horário tem um botão **Editar** (ícone de lápis). Ao clicar, um modal abre com os dados atuais pré-preenchidos: data, hora de início, hora de término e número de vagas.\n\nVocê pode alterar qualquer campo e clicar em **Salvar Alterações**.\n\n**Importante:** Se o horário já possui agendamentos, o sistema não permite reduzir as vagas abaixo do número de agendamentos existentes. Um aviso amarelo aparecerá informando a restrição."
+    },
+    {
+      "pergunta": "Como confirmar ou realizar uma visita?",
+      "resposta": "Acesse **Agendamentos** no menu. Para ações rápidas, use os botões na tabela:\n\n- Botão laranja **(✓)** = Confirmar (disponível para status Pendente)\n- Botão verde **(☺)** = Marcar como Realizada (disponível para status Confirmado)\n- Botão vermelho **(✕)** = Cancelar\n\nOu clique em **Detalhes** para abrir a ficha completa e ter mais controle.\n\nVocê também pode confirmar pendentes diretamente pelo **Dashboard**: clique no card amarelo 'Pendentes' para abrir uma lista rápida com todos os pendentes."
+    },
+    {
+      "pergunta": "O que são segmentos de ensino?",
+      "resposta": "São as divisões escolares que aparecem no formulário público para o visitante escolher. Exemplos: Berçário, Educação Infantil, Anos Iniciais, Anos Finais, Ensino Médio.\n\nAcesse **Segmentos de Ensino** no menu para adicionar, editar ou ativar/desativar cada um. A **ordem de exibição** define a sequência na lista (menor número aparece primeiro)."
+    },
+    {
+      "pergunta": "Como gerar horários para várias semanas?",
+      "resposta": "Na tela **Horários de Visitas**, clique em **Criar Novo Horário** e escolha a aba **Vários Dias de Uma Vez**.\n\n**Passo a passo:**\n1. Defina o período: data de início e término (ex: 01/07 a 31/07)\n2. Selecione os dias da semana clicando nos botões (ex: Segunda, Quarta, Sexta)\n3. Defina o horário (ex: 08:00 às 11:00) e as vagas (ex: 3)\n\nAntes de salvar, uma **prévia em verde** mostrará exatamente quantos horários serão criados. Só clique em **Gerar Horários** quando a prévia estiver correta."
+    },
+    {
+      "pergunta": "Como alterar minha senha?",
+      "resposta": "Acesse **Configurações** no menu lateral. No card **Alterar Senha do Usuário** (lado direito), preencha:\n\n1. Sua senha atual\n2. A nova senha (mínimo 6 caracteres)\n3. Confirmação da nova senha\n\nClique em **Alterar Senha do Usuário**. Nota: Não há recuperação por e-mail — guarde bem sua senha!"
+    },
+    {
+      "pergunta": "Como configurar notificações por e-mail?",
+      "resposta": "Acesse **Configurações** no menu lateral. No card **Notificações por E-mail** (lado direito), preencha o campo **'Meu E-mail para Receber Novos Agendamentos'** com o seu e-mail pessoal (ex: seuemail@gmail.com).\n\nA partir desse momento, toda vez que um visitante fizer um novo agendamento, você receberá um e-mail automático com os dados completos da visita.\n\n**Importante:** Cada administrador configura o seu próprio e-mail. Se deixar em branco, não recebe nada. Vários administradores podem receber ao mesmo tempo, basta cada um preencher o campo."
+    },
+    {
+      "pergunta": "O visitante recebe algum comprovante?",
+      "resposta": "Sim! Após finalizar o agendamento, o visitante recebe:\n\n**Na tela:**\n• Código de acompanhamento **XV-{número}** em destaque\n• **QR Code** com os dados do agendamento\n• Botão verde **WhatsApp** que envia mensagem pré-preenchida com o resumo da visita para o número da escola\n• Botão **Adicionar ao Google Agenda** que cria automaticamente o evento no celular\n• Botão **Imprimir Comprovante**\n\n**Por e-mail (se informou e-mail):**\n• E-mail automático com saudação personalizada, resumo da visita, código em destaque, orientações e botão para ver o comprovante online."
+    },
+    {
+      "pergunta": "Como funciona o QR Code?",
+      "resposta": "Cada agendamento gera um QR Code único na página de confirmação. Quando escaneado, ele abre a ficha completa do agendamento diretamente no sistema.\n\nSe você estiver **logado como administrador**, ao escanear o QR Code verá a ficha completa e poderá marcar a visita como **Realizada** na mesma tela. Muito útil na hora da visita presencial!"
+    },
+    {
+      "pergunta": "Como funciona o botão de WhatsApp na confirmação?",
+      "resposta": "Na página de confirmação do agendamento, existe um botão verde **WhatsApp** que, ao ser clicado, abre o WhatsApp com uma mensagem já pronta contendo:\n\n• Nome do responsável\n• Nome do aluno(a)\n• Segmento e série de interesse\n• Data e horário da visita\n• Código de confirmação\n\nA mensagem é enviada para o **número de telefone da escola** cadastrado em Configurações. Funciona tanto no computador (WhatsApp Web) quanto no celular (app do WhatsApp)."
+    },
+    {
+      "pergunta": "Quais campos são obrigatórios para agendar uma visita?",
+      "resposta": "Para o visitante fazer um agendamento, apenas **3 campos são obrigatórios**:\n\n1. **Nome do responsável**\n2. **Telefone**\n3. **Segmento escolar de interesse**\n\nTodos os demais campos são opcionais: WhatsApp, e-mail, nome da criança, idade, série e observações. Isso facilita para que a família consiga agendar rapidamente sem precisar preencher muita coisa."
+    },
+    {
+      "pergunta": "Quais são as contas e usuários padrão do sistema?",
+      "resposta": "O sistema possui dois usuários padrão pré-configurados que são criados automaticamente caso não existam:\n\n1. **Jessica Bonfim de Araujo**\n   • Usuário/Login: `jessica`\n   • Senha padrão: `jessica@2026`\n\n2. **Suellen Karla Pedro Silva**\n   • Usuário/Login: `suellen`\n   • Senha padrão: `suellen@2026`\n\nQualquer administrador pode acessar o painel usando essas credenciais."
+    }
+  ],
+
+  "fluxo_completo_sistema": {
+    "descricao": "Ciclo de vida de um agendamento do início ao fim",
+    "etapas": [
+      "Admin cadastra horários disponíveis em Horários de Visitas",
+      "Horários aparecem automaticamente no calendário público do site",
+      "Visitante acessa o site, clica na data, escolhe o horário, preenche o formulário (apenas nome, telefone e segmento são obrigatórios)",
+      "Sistema cria agendamento com status PENDENTE e código XV-{número}",
+      "Sistema envia e-mail de notificação para todos os administradores que têm e-mail de notificação configurado",
+      "Se o visitante informou e-mail, ele também recebe um e-mail de confirmação com resumo e código",
+      "Visitante vê página de confirmação com QR Code, botão WhatsApp e link para Google Agenda",
+      "Admin vê alerta de novo pendente no Dashboard (pode confirmar diretamente pelo modal de pendentes)",
+      "Admin confirma a visita → status vira CONFIRMADO (registra qual admin confirmou)",
+      "No dia da visita, admin marca como REALIZADO (via ficha, QR Code ou tela de agendamentos) (registra qual admin realizou)",
+      "Sistema registra quem realizou a confirmação e quem marcou como realizado com data e hora"
+    ]
+  }
+}

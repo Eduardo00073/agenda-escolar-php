@@ -1,0 +1,16 @@
+# AgendaXV - Regras de Segurança do Servidor Apache
+
+# Impedir listagem de diretórios
+Options -Indexes
+
+# Bloquear acesso a arquivos sensíveis
+<FilesMatch "^\.env|config\.php|db\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Permitir acesso ao install.php apenas se explicitamente necessário (comentar a linha acima ou remover install.php após o uso)
+
+# Proteger a pasta includes e admin/includes contra acesso direto
+RedirectMatch 403 ^/includes/.*$
+RedirectMatch 403 ^/admin/includes/.*$
