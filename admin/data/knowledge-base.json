@@ -19,15 +19,15 @@
       "5. Após selecionar o horário, um formulário aparece pedindo os dados: nome do responsável (obrigatório), telefone (obrigatório), WhatsApp (opcional), e-mail (opcional), nome da criança (opcional), idade (opcional), segmento escolar de interesse (obrigatório), série de interesse (opcional), e observações opcionais.",
       "6. O visitante preenche o formulário e clica em 'Confirmar Agendamento'. Apenas o nome do responsável, telefone e segmento são obrigatórios.",
       "7. O sistema verifica se ainda há vagas disponíveis para evitar overbooking.",
-      "8. Se houver vaga, o agendamento é criado com status 'Pendente' e é gerado um código de acompanhamento no formato XV-{número} (ex: XV-15, XV-16).",
+      "8. Se houver vaga, o agendamento é criado com status 'Pendente' e é gerado um código de acompanhamento no formato AGD-{número} (ex: AGD-15, AGD-16).",
       "9. O sistema envia automaticamente um e-mail de notificação para todos os administradores que configuraram e-mail de notificação no perfil.",
-      "10. Se o visitante informou e-mail, ele também recebe um e-mail de confirmação com o resumo completo do agendamento, o código XV e orientações para o dia da visita.",
+      "10. Se o visitante informou e-mail, ele também recebe um e-mail de confirmação com o resumo completo do agendamento, o código de acompanhamento AGD e orientações para o dia da visita.",
       "11. O visitante é redirecionado para a página de confirmação (confirmacao.php), que mostra todos os dados do agendamento, o código QR Code, botão de WhatsApp e botão para adicionar à agenda do Google."
     ],
     "pagina_confirmacao": {
       "descricao": "Exibida ao visitante após completar o agendamento com sucesso.",
       "conteudo": [
-        "Código de acompanhamento no formato XV-{número} em destaque",
+        "Código de acompanhamento no formato AGD-{número} em destaque",
         "QR Code gerado automaticamente com os dados do agendamento",
         "Resumo completo: data, horário, nome do responsável, nome da criança, segmento, série",
         "Botão verde 'WhatsApp' que abre o WhatsApp com mensagem pré-preenchida contendo o resumo completo do agendamento (nome, aluno, segmento, série, data, horário e código) direcionado ao telefone da escola cadastrado em Configurações",
@@ -40,8 +40,8 @@
       "botao_whatsapp": "O botão verde do WhatsApp gera automaticamente uma mensagem com todos os dados da visita e envia para o número da escola cadastrado em Configurações. Só aparece se houver telefone cadastrado."
     },
     "codigo_agendamento": {
-      "formato": "XV-{id_do_banco}",
-      "exemplos": ["XV-1", "XV-15", "XV-42"],
+      "formato": "AGD-{id_do_banco}",
+      "exemplos": ["AGD-1", "AGD-15", "AGD-42"],
       "descricao": "Código curto e amigável gerado automaticamente. Substituiu o antigo token longo e ilegível. Cada agendamento tem um código único."
     },
     "notificacao_email_visitante": {
@@ -104,7 +104,7 @@
         "Dados completos do responsável: nome, telefone, WhatsApp (com botão Conversar no WhatsApp), e-mail (com botão Enviar E-mail)",
         "Observações enviadas pelo visitante",
         "Status atual da visita com badge colorido",
-        "Código de acompanhamento (XV-número)",
+        "Código de acompanhamento (AGD-número)",
         "Histórico completo de status: quando foi confirmado e por qual admin, quando foi realizado e por qual admin",
         "Controle de status: botões para Confirmar, Marcar como Realizada, Cancelar, ou Reverter para Pendente",
         "Data e horário da agenda selecionada"
@@ -272,7 +272,7 @@
     },
     {
       "pergunta": "O visitante recebe algum comprovante?",
-      "resposta": "Sim! Após finalizar o agendamento, o visitante recebe:\n\n**Na tela:**\n• Código de acompanhamento **XV-{número}** em destaque\n• **QR Code** com os dados do agendamento\n• Botão verde **WhatsApp** que envia mensagem pré-preenchida com o resumo da visita para o número da escola\n• Botão **Adicionar ao Google Agenda** que cria automaticamente o evento no celular\n• Botão **Imprimir Comprovante**\n\n**Por e-mail (se informou e-mail):**\n• E-mail automático com saudação personalizada, resumo da visita, código em destaque, orientações e botão para ver o comprovante online."
+      "resposta": "Sim! Após finalizar o agendamento, o visitante recebe:\n\n**Na tela:**\n• Código de acompanhamento **AGD-{número}** em destaque\n• **QR Code** com os dados do agendamento\n• Botão verde **WhatsApp** que envia mensagem pré-preenchida com o resumo da visita para o número da escola\n• Botão **Adicionar ao Google Agenda** que cria automaticamente o evento no celular\n• Botão **Imprimir Comprovante**\n\n**Por e-mail (se informou e-mail):**\n• E-mail automático com saudação personalizada, resumo da visita, código em destaque, orientações e botão para ver o comprovante online."
     },
     {
       "pergunta": "Como funciona o QR Code?",
@@ -298,7 +298,7 @@
       "Admin cadastra horários disponíveis em Horários de Visitas",
       "Horários aparecem automaticamente no calendário público do site",
       "Visitante acessa o site, clica na data, escolhe o horário, preenche o formulário (apenas nome, telefone e segmento são obrigatórios)",
-      "Sistema cria agendamento com status PENDENTE e código XV-{número}",
+      "Sistema cria agendamento com status PENDENTE e código AGD-{número}",
       "Sistema envia e-mail de notificação para todos os administradores que têm e-mail de notificação configurado",
       "Se o visitante informou e-mail, ele também recebe um e-mail de confirmação com resumo e código",
       "Visitante vê página de confirmação com QR Code, botão WhatsApp e link para Google Agenda",

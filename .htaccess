@@ -1,4 +1,4 @@
-# AgendaXV - Regras de Segurança do Servidor Apache
+# Agenda Escolar - Regras de Segurança do Servidor Apache
 
 # Impedir listagem de diretórios
 Options -Indexes

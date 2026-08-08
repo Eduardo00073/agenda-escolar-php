@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Obter o ID gerado e definir o token curto
                 $agendamento_id = $db->lastInsertId();
-                $token = 'XV-' . $agendamento_id;
+                $token = 'AGD-' . $agendamento_id;
 
                 // Atualizar o registro com o token curto e final
                 $stmtUpdate = $db->prepare("UPDATE agendamentos SET token = ? WHERE id = ?");
