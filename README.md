@@ -224,3 +224,15 @@ Para negociar uma licença comercial ou suporte técnico:
 <div align="center">
   <p>© 2026 Eduardo Junior Alcântara da Silva. Todos os direitos reservados.</p>
 </div>
+
+---
+
+## ⭐ Gostou do projeto?
+
+Se este projeto te ajudou, deixe uma estrela — isso ajuda outras escolas e desenvolvedores a encontrarem o repositório.
+
+### 🔗 Outros projetos relacionados
+
+🐘 [PHP — Do Console à API](https://github.com/Eduardo00073/php-do-console-a-api) — trilha completa de PHP, do básico a APIs RESTful.
+
+📚 [Books API](https://github.com/Eduardo00073/books-api) — API REST em Spring Boot com JWT para gestão de livros.
